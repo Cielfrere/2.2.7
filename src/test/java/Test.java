@@ -9,7 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Test {
 
     private final TipService tipService = new TipService();
-    @ParameterizedTest
+
+    @ParameterizedTest(name = "{index} => сумма={0}, expected={1}")
     @CsvSource({
             "900, 990.0",
             "1000, 1050.00",
@@ -20,7 +21,11 @@ public class Test {
     void testRoundTips(String amountStr, String expectedStr) {
         BigDecimal amount = new BigDecimal(amountStr);
         BigDecimal expected = new BigDecimal(expectedStr);
+
+        BigDecimal expectedCalculated = amount.multiply(new BigDecimal("1.10"));
+
         BigDecimal result = tipService.roundTips(amount);
-        assertEquals(expected, result);
+
+        assertEquals(expected, result, "Ожидаемый результат: " + expectedCalculated + ", Фактический результат: " + result);
     }
 }
